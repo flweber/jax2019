@@ -19,9 +19,28 @@ console.log(todo);
 
 const express = require('express');
 
+const morgan = require('morgan');
+
+const fs = require('fs');
+
+const path = require('path');
+
+const bodyParser = require('body-parser');
+
 const todoRouter = require('./todo');
 
 const app = express();
+
+const stream = fs.createWriteStream(
+    path.join(__dirname, 'access.log'),
+    {
+        flags: 'a'
+    }
+);
+
+app.use(morgan('combined', { stream }));
+
+app.use(bodyParser.json());
 
 app.listen(8080);
 
